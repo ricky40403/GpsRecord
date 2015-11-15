@@ -1,0 +1,48 @@
+<!-- home.html -->
+<html>
+<head>
+	<title>Welcome</title>
+	<meta charset="utf-8" />
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+</head>
+<body>
+	{% if post_list %}
+		<div id="map" style="width: 600px; height: 400px"></div>
+		<p>Where had you been</p>
+		{% for post in post_list %}
+			<div>		
+				<p>Title: {{ post.title }} </p>
+				<p>X_position: {{ post.Xpos }}</p>
+				<p>Y_position: {{ post.Ypos }} </p>
+			</div>
+		{% endfor %}
+	{% else %}
+		<p>There is no record,please push the button to locat. </p>
+	{% endif %}
+	<input type ="button" onclick="javascript:location.href='locat'" value="To locat and record Position"></input>
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<script>	
+		var map = L.map('map').setView([ {{ post_list.0.Xpos }},{{ post_list.0.Ypos }}], 13);
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map);
+
+		var LeafIcon = L.Icon.extend({
+			options: {
+				shadowUrl: '../docs/images/leaf-shadow.png',
+				iconSize:     [38, 95],
+				shadowSize:   [50, 64],
+				iconAnchor:   [22, 94],
+				shadowAnchor: [4, 62],
+				popupAnchor:  [-3, -76]
+			}
+		});
+		{% for post in post_list %}
+		L.marker([ {{ post.Xpos }},{{ post.Ypos }}]).addTo(map);
+		{% endfor %}
+	</script>
+	
+
+</body>
+
+</html>
